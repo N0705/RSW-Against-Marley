@@ -1,0 +1,9 @@
+Tkinter alone cannot prevent users from leaving via Dock, Taskbar, Cmd+Tab, Alt+Tab, or gestures.
+
+To fully lock the screen:
+
+macOS: Use Single App Mode / Guided Access (requires MDM or Configurator).
+
+Windows: Use Assigned Access / Kiosk Mode.
+
+Tkinter can still handle fullscreen, topmost, no-close behavior inside the app itself.
