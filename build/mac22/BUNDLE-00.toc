@@ -1,0 +1,1 @@
+([('mac22', '/Volumes/RANSOM/RSW-Against-Marley/dist/mac22', 'EXECUTABLE')],)
