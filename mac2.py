@@ -1,7 +1,11 @@
 import sys
 import tkinter as tk
+from tkinter import messagebox
 
 is_windows = sys.platform.startswith("win")
+
+# Set your correct key here
+CORRECT_KEY = "pianto123"  
 
 if is_windows:
     import ctypes
@@ -94,7 +98,7 @@ if is_windows:
         red_windows.append(red)
 
     # Labels
-    title_label = tk.Label(window, text="Your System Pianto", font=("Arial", 30, "bold"),
+    title_label = tk.Label(window, text="Your System", font=("Arial", 30, "bold"),
                            bg="red", fg="white")
     title_label.place(relx=0.5, rely=0.2, anchor="center")
 
@@ -123,7 +127,7 @@ if is_windows:
     popup_height = 200
     popup.geometry(f"{popup_width}x{popup_height}+{primary['x'] + primary['width']//2 - popup_width//2}+{primary['y'] + primary['height']//2 - popup_height//2}")
 
-    tk.Label(popup, text="Enter Your Key", font=("Arial", 18, "bold"),
+    tk.Label(popup, text="Enter Key", font=("Arial", 18, "bold"),
              bg="black", fg="white").pack(pady=(20, 10))
 
     entry = tk.Entry(popup, textvariable=name_var, font=("Arial", 16), width=25,
@@ -133,12 +137,10 @@ if is_windows:
     popup.grab_set()
 
     def submit():
-        if name_var.get().strip():
-            # Update label first
-            tk.Button(window, text="Close", command=window.destroy, font=("Arial", 16))\
+        entered_key = name_var.get().strip()
+        if entered_key == CORRECT_KEY:
+            tk.Button(window, text="Unencrypt", command=window.destroy, font=("Arial", 16))\
                 .place(relx=0.5, rely=0.8, anchor="center")
-
-            # Fade out and destroy red screens
             fade_out_windows(red_windows)
             for w in red_windows:
                 try:
@@ -146,13 +148,15 @@ if is_windows:
                         w.destroy()
                 except tk.TclError:
                     pass
-
-            # Destroy popup last
             try:
                 if popup.winfo_exists():
                     popup.destroy()
             except tk.TclError:
                 pass
+        else:
+            name_var.set("")
+            entry.focus_set()
+            messagebox.showerror("Invalid Key", "The key you entered is incorrect. Try again.")
 
     tk.Button(popup, text="Submit", command=submit, font=("Arial", 14),
               bg="#4CAF50", fg="black", width=12).pack(pady=15)
@@ -162,7 +166,7 @@ if is_windows:
     window.mainloop()
 
 else:
-    # macOS code untouched
+    # --- macOS version ---
     from screeninfo import get_monitors
 
     def get_name_on_all_monitors():
@@ -193,9 +197,14 @@ else:
             entry.focus_set()
 
             def submit(p=popup):
-                if name_var.get().strip():
+                entered_key = name_var.get().strip()
+                if entered_key == CORRECT_KEY:
                     for w in popups:
                         w.destroy()
+                else:
+                    name_var.set("")
+                    entry.focus_set()
+                    messagebox.showerror("Invalid Key", "The key you entered is incorrect. Try again.")
 
             submit_btn = tk.Button(popup, text="Submit", command=submit,
                                    font=("Arial", 14), bg="#4CAF50", fg="Black", width=12)
@@ -217,7 +226,7 @@ else:
     center_frame = tk.Frame(window, bg="red")
     center_frame.pack(expand=True)
 
-    title_label = tk.Label(center_frame, text="Your System Pianto", font=("Arial", 30, "bold"), bg="red", fg="white")
+    title_label = tk.Label(center_frame, text="Your System", font=("Arial", 30, "bold"), bg="red", fg="white")
     title_label.pack(pady=20)
 
     greeting_label = tk.Label(center_frame, text="", font=("Arial", 24), bg="red", fg="white")
